@@ -4,71 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family Chore Tracker</title>
-    <!-- House Emoji Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏡</text></svg>">
+    <!-- Plant Sprout Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+    
+    <!-- Google Fonts Integration -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-color: #6366f1;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --accent: #f59e0b;
-            --success: #10b981;
-            --input-bg: #f8fafc;
-            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --bg-color: #121e17;
+            --card-bg: #1c2e24;
+            --card-border: #2a4234;
+            --text-main: #f1f7f3;
+            --text-muted: #8ca393;
+            --primary: #4e8261;
+            --primary-hover: #3d694e;
+            --accent-terracotta: #c86d51;
+            --accent-sage: #82a382;
+            --accent-gold: #e5a93c;
+            --input-bg: #15241c;
+            --card-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.4);
+            --app-font: 'Plus Jakarta Sans', sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.15s ease;
+            font-family: var(--app-font);
+            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.2s ease;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 24px 32px;
+            padding: 28px 36px;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(78, 130, 97, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(200, 109, 81, 0.1) 0%, transparent 45%);
+            background-attachment: fixed;
         }
 
-        /* Top Header */
+        /* Entrance Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes checkBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+
+        /* Header */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.5s ease-out;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         header h1 {
-            font-size: 2rem;
+            font-size: 2.1rem;
             font-weight: 800;
-            color: #ffffff;
+            color: #f1f7f3;
             letter-spacing: -0.025em;
             display: flex;
             align-items: center;
             gap: 12px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
-        .theme-picker-wrapper {
+        .controls-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .control-pill {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(28, 46, 36, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             padding: 8px 18px;
             border-radius: 9999px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
             font-weight: 600;
-            font-size: 0.875rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-size: 0.88rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        select.font-select {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.88rem;
+        }
+
+        select.font-select option {
+            background: var(--card-bg);
+            color: var(--text-main);
         }
 
         input[type="color"] {
@@ -83,17 +148,18 @@
 
         input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         input[type="color"]::-webkit-color-swatch {
-            border: 2px solid white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
 
         /* Top Controls Grid */
         .top-controls {
             display: grid;
             grid-template-columns: 360px 1fr;
-            gap: 20px;
-            margin-bottom: 28px;
+            gap: 22px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out;
         }
 
         @media (max-width: 1024px) {
@@ -105,19 +171,31 @@
         /* Cards */
         .card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 22px;
+            border-radius: 24px;
+            padding: 24px;
             box-shadow: var(--card-shadow);
-            border: 1px solid var(--border);
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-sage));
+            opacity: 0.8;
         }
 
         .card h2 {
             font-size: 1.15rem;
             font-weight: 700;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--text-main);
         }
 
         .inline-form {
@@ -134,19 +212,19 @@
 
         label {
             display: block;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
             margin-bottom: 6px;
             color: var(--text-muted);
         }
 
         input, select {
             width: 100%;
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1.5px solid var(--border);
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1.5px solid var(--card-border);
             background: var(--input-bg);
             color: var(--text-main);
             outline: none;
@@ -155,13 +233,13 @@
         }
 
         input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+            border-color: var(--accent-sage);
+            box-shadow: 0 0 0 3px rgba(130, 163, 130, 0.2);
         }
 
         .color-pickers {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             padding-top: 4px;
         }
 
@@ -173,28 +251,38 @@
             cursor: pointer;
         }
 
-        .color-btn.selected {
-            border-color: var(--text-main);
+        .color-btn:hover {
             transform: scale(1.15);
+        }
+
+        .color-btn.selected {
+            border-color: #ffffff;
+            transform: scale(1.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
         }
 
         button.btn-primary {
             background: var(--primary);
-            color: white;
+            color: #ffffff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 11px 22px;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 0.9rem;
             cursor: pointer;
             white-space: nowrap;
-            height: 42px;
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+            height: 44px;
+            box-shadow: 0 4px 14px rgba(78, 130, 97, 0.35);
         }
 
         button.btn-primary:hover {
             background: var(--primary-hover);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(78, 130, 97, 0.45);
+        }
+
+        button.btn-primary:active {
+            transform: translateY(0);
         }
 
         /* Member Chips */
@@ -202,19 +290,24 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 14px;
+            margin-top: 16px;
         }
 
         .member-chip {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 9999px;
             background: var(--input-bg);
-            border: 1px solid var(--border);
+            border: 1px solid var(--card-border);
             font-size: 0.85rem;
             font-weight: 600;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .member-chip:hover {
+            border-color: var(--accent-sage);
         }
 
         .avatar {
@@ -227,6 +320,7 @@
             color: white;
             font-size: 0.72rem;
             font-weight: 800;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .delete-btn {
@@ -241,63 +335,80 @@
         }
 
         .delete-btn:hover {
-            color: #ef4444;
+            color: #f87171;
+            transform: scale(1.2);
         }
 
         /* Filter Bar */
         .filter-bar {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             overflow-x: auto;
             padding-bottom: 6px;
+            animation: fadeInUp 0.7s ease-out;
         }
 
         .filter-btn {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            color: #0f172a;
-            padding: 8px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 9px 20px;
             border-radius: 9999px;
             font-size: 0.88rem;
             font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .filter-btn:hover {
+            color: var(--text-main);
+            border-color: var(--accent-sage);
+            transform: translateY(-2px);
         }
 
         .filter-btn.active {
-            background: #0f172a;
+            background: var(--primary);
             color: #ffffff;
-            border-color: #0f172a;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 6px 16px rgba(78, 130, 97, 0.4);
         }
 
         /* Chore Grid */
         .chore-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 18px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .chore-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 18px 20px;
+            padding: 20px;
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
             box-shadow: var(--card-shadow);
+            animation: popIn 0.35s ease-out;
+        }
+
+        .chore-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-sage);
+            box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.5);
         }
 
         .chore-item.completed {
-            opacity: 0.65;
+            opacity: 0.55;
+            background: rgba(28, 46, 36, 0.5);
         }
 
         .chore-item.completed .chore-title {
             text-decoration: line-through;
+            color: var(--text-muted);
         }
 
         .chore-left {
@@ -307,10 +418,10 @@
         }
 
         .checkbox {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 8px;
-            border: 2px solid var(--border);
+            border: 2px solid var(--card-border);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -318,11 +429,18 @@
             font-weight: 800;
             color: white;
             background: var(--input-bg);
+            font-size: 0.85rem;
+        }
+
+        .checkbox:hover {
+            border-color: var(--accent-sage);
+            transform: scale(1.1);
         }
 
         .chore-item.completed .checkbox {
-            background: var(--success);
-            border-color: var(--success);
+            background: var(--primary);
+            border-color: var(--primary);
+            animation: checkBounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .chore-title {
@@ -338,14 +456,15 @@
             font-size: 0.8rem;
             color: var(--text-muted);
             margin-top: 4px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .money-badge {
-            background: #fef3c7;
-            color: #d97706;
+            background: rgba(229, 169, 60, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid rgba(229, 169, 60, 0.3);
             padding: 2px 8px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 700;
             font-size: 0.78rem;
             display: inline-flex;
@@ -356,22 +475,36 @@
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 50px 20px;
+            padding: 60px 20px;
             color: var(--text-muted);
             background: var(--card-bg);
-            border-radius: 20px;
-            border: 2px dashed var(--border);
+            border-radius: 24px;
+            border: 2px dashed var(--card-border);
             font-weight: 600;
+            font-size: 1.05rem;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🏡 Family Chore Tracker</h1>
-        <div class="theme-picker-wrapper">
-            <span>🎨 Theme</span>
-            <input type="color" id="bgPicker" value="#6366f1">
+        <h1>🌿 Family Chore Tracker</h1>
+        <div class="controls-wrapper">
+            <div class="control-pill">
+                <span>✍️ Font</span>
+                <select class="font-select" id="fontPicker">
+                    <option value="'Plus Jakarta Sans', sans-serif">Jakarta Sans</option>
+                    <option value="'Quicksand', sans-serif">Quicksand (Soft)</option>
+                    <option value="'Outfit', sans-serif">Outfit (Modern)</option>
+                    <option value="'Playfair Display', serif">Playfair (Serif)</option>
+                    <option value="'Caveat', cursive">Caveat (Handwritten)</option>
+                    <option value="'Space Mono', monospace">Space Mono</option>
+                </select>
+            </div>
+            <div class="control-pill">
+                <span>🎨 Atmosphere</span>
+                <input type="color" id="bgPicker" value="#121e17">
+            </div>
         </div>
     </header>
 
@@ -379,7 +512,7 @@
     <div class="top-controls">
         <!-- Add Family Member -->
         <div class="card">
-            <h2>👤 Add Member</h2>
+            <h2>🪴 Add Member</h2>
             <form id="memberForm">
                 <div class="inline-form">
                     <div class="form-group" style="flex: 2;">
@@ -389,10 +522,10 @@
                     <div class="form-group">
                         <label>Avatar Color</label>
                         <div class="color-pickers" id="colorPicker">
-                            <button type="button" class="color-btn selected" data-color="#6366f1" style="background:#6366f1;"></button>
-                            <button type="button" class="color-btn" data-color="#ec4899" style="background:#ec4899;"></button>
-                            <button type="button" class="color-btn" data-color="#10b981" style="background:#10b981;"></button>
-                            <button type="button" class="color-btn" data-color="#f59e0b" style="background:#f59e0b;"></button>
+                            <button type="button" class="color-btn selected" data-color="#4e8261" style="background:#4e8261;"></button>
+                            <button type="button" class="color-btn" data-color="#c86d51" style="background:#c86d51;"></button>
+                            <button type="button" class="color-btn" data-color="#82a382" style="background:#82a382;"></button>
+                            <button type="button" class="color-btn" data-color="#e5a93c" style="background:#e5a93c;"></button>
                         </div>
                     </div>
                     <button type="submit" class="btn-primary">Add</button>
@@ -403,12 +536,12 @@
 
         <!-- Assign New Chore -->
         <div class="card">
-            <h2>✨ Assign New Chore</h2>
+            <h2>🌱 Assign New Chore</h2>
             <form id="choreForm">
                 <div class="inline-form">
                     <div class="form-group" style="flex: 2;">
                         <label for="choreTitle">Description</label>
-                        <input type="text" id="choreTitle" placeholder="e.g. Wash dishes" required>
+                        <input type="text" id="choreTitle" placeholder="e.g. Water house plants" required>
                     </div>
                     <div class="form-group">
                         <label for="choreAssignee">Assign To</label>
@@ -437,19 +570,21 @@
     <script>
         // App State
         let members = JSON.parse(localStorage.getItem('family_members')) || [
-            { id: '1', name: 'Mom', color: '#ec4899' },
-            { id: '2', name: 'Louis', color: '#6366f1' }
+            { id: '1', name: 'Mom', color: '#c86d51' },
+            { id: '2', name: 'Louis', color: '#4e8261' }
         ];
 
         let chores = JSON.parse(localStorage.getItem('family_chores')) || [
-            { id: '101', title: 'Take out rubbish', assigneeId: '2', dueDate: '2026-09-10', reward: '2.00', completed: false },
-            { id: '102', title: 'Clean kitchen counter', assigneeId: '1', dueDate: '2026-09-09', reward: '5.00', completed: true }
+            { id: '101', title: 'Water Monstera & Ferns', assigneeId: '2', dueDate: '2026-09-10', reward: '3.00', completed: false },
+            { id: '102', title: 'Sweep garden patio', assigneeId: '1', dueDate: '2026-09-09', reward: '5.00', completed: true }
         ];
 
-        let selectedColor = '#6366f1';
+        let selectedColor = '#4e8261';
         let currentFilter = 'all';
 
         // DOM Elements
+        const fontPicker = document.getElementById('fontPicker');
+        const bgPicker = document.getElementById('bgPicker');
         const memberForm = document.getElementById('memberForm');
         const memberNameInput = document.getElementById('memberName');
         const colorPicker = document.getElementById('colorPicker');
@@ -463,9 +598,21 @@
         
         const filterBar = document.getElementById('filterBar');
         const choreList = document.getElementById('choreList');
-        const bgPicker = document.getElementById('bgPicker');
 
-        // Theme Switcher Logic with Contrast Engine
+        // Font Selection Logic
+        const savedFont = localStorage.getItem('family_font');
+        if (savedFont) {
+            document.documentElement.style.setProperty('--app-font', savedFont);
+            fontPicker.value = savedFont;
+        }
+
+        fontPicker.addEventListener('change', (e) => {
+            const font = e.target.value;
+            document.documentElement.style.setProperty('--app-font', font);
+            localStorage.setItem('family_font', font);
+        });
+
+        // Theme Switcher Logic with Botanical Contrast Engine
         bgPicker.addEventListener('input', (e) => {
             const hex = e.target.value;
             document.documentElement.style.setProperty('--bg-color', hex);
@@ -476,17 +623,17 @@
             const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
             if (brightness < 130) {
-                document.documentElement.style.setProperty('--card-bg', '#1e293b');
-                document.documentElement.style.setProperty('--text-main', '#f8fafc');
-                document.documentElement.style.setProperty('--text-muted', '#94a3b8');
-                document.documentElement.style.setProperty('--border', '#334155');
-                document.documentElement.style.setProperty('--input-bg', '#0f172a');
-                document.documentElement.style.setProperty('--card-shadow', '0 10px 25px -5px rgba(0, 0, 0, 0.3)');
+                document.documentElement.style.setProperty('--card-bg', '#1c2e24');
+                document.documentElement.style.setProperty('--card-border', '#2a4234');
+                document.documentElement.style.setProperty('--text-main', '#f1f7f3');
+                document.documentElement.style.setProperty('--text-muted', '#8ca393');
+                document.documentElement.style.setProperty('--input-bg', '#15241c');
+                document.documentElement.style.setProperty('--card-shadow', '0 12px 30px -8px rgba(0, 0, 0, 0.4)');
             } else {
                 document.documentElement.style.setProperty('--card-bg', '#ffffff');
+                document.documentElement.style.setProperty('--card-border', '#e2e8f0');
                 document.documentElement.style.setProperty('--text-main', '#0f172a');
                 document.documentElement.style.setProperty('--text-muted', '#64748b');
-                document.documentElement.style.setProperty('--border', '#e2e8f0');
                 document.documentElement.style.setProperty('--input-bg', '#f8fafc');
                 document.documentElement.style.setProperty('--card-shadow', '0 10px 25px -5px rgba(0, 0, 0, 0.08)');
             }
@@ -598,12 +745,12 @@
             const filteredChores = currentFilter === 'all' ? chores : chores.filter(c => c.assigneeId === currentFilter);
 
             if (filteredChores.length === 0) {
-                choreList.innerHTML = `<div class="empty-state"><p>🎉 No chores found for this view!</p></div>`;
+                choreList.innerHTML = `<div class="empty-state"><p>🌱 All caught up! No active chores found.</p></div>`;
                 return;
             }
 
             filteredChores.forEach(chore => {
-                const assignee = members.find(m => m.id === chore.assigneeId) || { name: 'Unassigned', color: '#94a3b8' };
+                const assignee = members.find(m => m.id === chore.assigneeId) || { name: 'Unassigned', color: '#8ca393' };
                 const item = document.createElement('div');
                 item.className = `chore-item ${chore.completed ? 'completed' : ''}`;
                 item.innerHTML = `
@@ -613,12 +760,12 @@
                             <div class="chore-title">${chore.title}</div>
                             <div class="chore-meta">
                                 <span>📅 Due: ${chore.dueDate}</span>
-                                ${chore.reward ? `<span class="money-badge">💵 $${chore.reward}</span>` : ''}
+                                ${chore.reward ? `<span class="money-badge">🪙 $${chore.reward}</span>` : ''}
                             </div>
                         </div>
                     </div>
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <div class="member-chip" style="background:var(--card-bg);">
+                        <div class="member-chip" style="background:var(--input-bg);">
                             <div class="avatar" style="background:${assignee.color}">${assignee.name.charAt(0).toUpperCase()}</div>
                             <span>${assignee.name}</span>
                         </div>
