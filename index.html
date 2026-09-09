@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Chore Tracker</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-muted);
+        }
+
+        /* Layout Grid */
+        .app-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            outline: none;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        .color-pickers {
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-btn.selected {
+            border-color: var(--text-main);
+            transform: scale(1.1);
+        }
+
+        button.btn-primary {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button.btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Member Chips */
+        .member-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .member-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #f1f5f9;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .delete-member {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 4px;
+        }
+
+        .delete-member:hover {
+            color: #ef4444;
+        }
+
+        /* Chores Section */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-btn.active {
+            background: var(--text-main);
+            color: white;
+            border-color: var(--text-main);
+        }
+
+        .chore-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chore-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .chore-item.completed {
+            opacity: 0.6;
+            background: #f8fafc;
+        }
+
+        .chore-item.completed .chore-title {
+            text-decoration: line-through;
+        }
+
+        .chore-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .chore-item.completed .checkbox {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .chore-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .chore-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .chore-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🏡 Family Chore Tracker</h1>
+            <p>Register members, create tasks, and manage household chores together.</p>
+        </header>
+
+        <div class="app-grid">
+            <!-- Sidebar: Registration & Creation -->
+            <div class="sidebar">
+                <!-- Add Family Member -->
+                <div class="card">
+                    <h2>👤 Add Family Member</h2>
+                    <form id="memberForm">
+                        <div class="form-group">
+                            <label for="memberName">Member Name</label>
+                            <input type="text" id="memberName" placeholder="e.g. Alex, Mom, Sam" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Avatar Color</label>
+                            <div class="color-pickers" id="colorPicker">
+                                <button type="button" class="color-btn selected" data-color="#6366f1" style="background:#6366f1;"></button>
+                                <button type="button" class="color-btn" data-color="#ec4899" style="background:#ec4899;"></button>
+                                <button type="button" class="color-btn" data-color="#10b981" style="background:#10b981;"></button>
+                                <button type="button" class="color-btn" data-color="#f59e0b" style="background:#f59e0b;"></button>
+                                <button type="button" class="color-btn" data-color="#8b5cf6" style="background:#8b5cf6;"></button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Add Member</button>
+                    </form>
+
+                    <div class="member-list" id="memberList">
+                        <!-- Members dynamically added here -->
+                    </div>
+                </div>
+
+                <!-- Create Chore -->
+                <div class="card">
+                    <h2>✨ Assign New Chore</h2>
+                    <form id="choreForm">
+                        <div class="form-group">
+                            <label for="choreTitle">Chore Description</label>
+                            <input type="text" id="choreTitle" placeholder="e.g. Wash dishes, Water plants" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="choreAssignee">Assign To</label>
+                            <select id="choreAssignee" required>
+                                <option value="">Select family member...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="choreDueDate">Due Date</label>
+                            <input type="date" id="choreDueDate" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Create Chore</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Main Content: Chores Display -->
+            <div class="main-content">
+                <div class="filter-bar" id="filterBar">
+                    <button class="filter-btn active" data-filter="all">All Tasks</button>
+                    <!-- Member filters dynamically inserted here -->
+                </div>
+
+                <div class="chore-list" id="choreList">
+                    <!-- Chores rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let members = JSON.parse(localStorage.getItem('family_members')) || [
+            { id: '1', name: 'Mom', color: '#ec4899' },
+            { id: '2', name: 'Alex', color: '#6366f1' }
+        ];
+
+        let chores = JSON.parse(localStorage.getItem('family_chores')) || [
+            { id: '101', title: 'Take out the trash', assigneeId: '2', dueDate: '2026-09-10', completed: false },
+            { id: '102', title: 'Clean kitchen counter', assigneeId: '1', dueDate: '2026-09-09', completed: true }
+        ];
+
+        let selectedColor = '#6366f1';
+        let currentFilter = 'all';
+
+        // DOM Elements
+        const memberForm = document.getElementById('memberForm');
+        const memberNameInput = document.getElementById('memberName');
+        const colorPicker = document.getElementById('colorPicker');
+        const memberList = document.getElementById('memberList');
+        
+        const choreForm = document.getElementById('choreForm');
+        const choreTitleInput = document.getElementById('choreTitle');
+        const choreAssigneeSelect = document.getElementById('choreAssignee');
+        const choreDueDateInput = document.getElementById('choreDueDate');
+        
+        const filterBar = document.getElementById('filterBar');
+        const choreList = document.getElementById('choreList');
+
+        // Color Picker Handler
+        colorPicker.addEventListener('click', (e) => {
+            if (e.target.classList.contains('color-btn')) {
+                document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('selected'));
+                e.target.classList.add('selected');
+                selectedColor = e.target.getAttribute('data-color');
+            }
+        });
+
+        // Add Member
+        memberForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = memberNameInput.value.trim();
+            if (!name) return;
+
+            const newMember = {
+                id: Date.now().toString(),
+                name: name,
+                color: selectedColor
+            };
+
+            members.push(newMember);
+            saveData();
+            render();
+            memberNameInput.value = '';
+        });
+
+        // Delete Member
+        function deleteMember(id) {
+            members = members.filter(m => m.id !== id);
+            chores = chores.filter(c => c.assigneeId !== id);
+            saveData();
+            render();
+        }
+
+        // Add Chore
+        choreForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = choreTitleInput.value.trim();
+            const assigneeId = choreAssigneeSelect.value;
+            const dueDate = choreDueDateInput.value;
+
+            if (!title || !assigneeId || !dueDate) return;
+
+            const newChore = {
+                id: Date.now().toString(),
+                title,
+                assigneeId,
+                dueDate,
+                completed: false
+            };
+
+            chores.push(newChore);
+            saveData();
+            render();
+            choreTitleInput.value = '';
+        });
+
+        // Toggle Chore Completion
+        function toggleChore(id) {
+            chores = chores.map(chore => {
+                if (chore.id === id) {
+                    return { ...chore, completed: !chore.completed };
+                }
+                return chore;
+            });
+            saveData();
+            render();
+        }
+
+        // Delete Chore
+        function deleteChore(id) {
+            chores = chores.filter(c => c.id !== id);
+            saveData();
+            render();
+        }
+
+        // Save to LocalStorage
+        function saveData() {
+            localStorage.setItem('family_members', JSON.stringify(members));
+            localStorage.setItem('family_chores', JSON.stringify(chores));
+        }
+
+        // Render Application
+        function render() {
+            // Render Members List
+            memberList.innerHTML = '';
+            choreAssigneeSelect.innerHTML = '<option value="">Select family member...</option>';
+
+            members.forEach(member => {
+                // Member chip
+                const chip = document.createElement('div');
+                chip.className = 'member-chip';
+                chip.innerHTML = `
+                    <div class="avatar" style="background:${member.color}">
+                        ${member.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span>${member.name}</span>
+                    <button class="delete-member" onclick="deleteMember('${member.id}')">&times;</button>
+                `;
+                memberList.appendChild(chip);
+
+                // Option in chore select form
+                const option = document.createElement('option');
+                option.value = member.id;
+                option.textContent = member.name;
+                choreAssigneeSelect.appendChild(option);
+            });
+
+            // Render Filter Bar
+            filterBar.innerHTML = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">All Tasks</button>`;
+            members.forEach(member => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${currentFilter === member.id ? 'active' : ''}`;
+                btn.setAttribute('data-filter', member.id);
+                btn.textContent = member.name;
+                btn.onclick = () => {
+                    currentFilter = member.id;
+                    render();
+                };
+                filterBar.appendChild(btn);
+            });
+            
+            filterBar.querySelector('[data-filter="all"]').onclick = () => {
+                currentFilter = 'all';
+                render();
+            };
+
+            // Render Chores
+            choreList.innerHTML = '';
+            
+            const filteredChores = currentFilter === 'all' 
+                ? chores 
+                : chores.filter(c => c.assigneeId === currentFilter);
+
+            if (filteredChores.length === 0) {
+                choreList.innerHTML = `
+                    <div class="empty-state">
+                        <p>🎉 No chores found!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredChores.forEach(chore => {
+                const assignee = members.find(m => m.id === chore.assigneeId) || { name: 'Unassigned', color: '#94a3b8' };
+                
+                const item = document.createElement('div');
+                item.className = `chore-item ${chore.completed ? 'completed' : ''}`;
+                item.innerHTML = `
+                    <div class="chore-left">
+                        <div class="checkbox" onclick="toggleChore('${chore.id}')">
+                            ${chore.completed ? '✓' : ''}
+                        </div>
+                        <div class="chore-details">
+                            <div class="chore-title">${chore.title}</div>
+                            <div class="chore-meta">
+                                <span>📅 Due: ${chore.dueDate}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div class="member-chip" style="background:#fff; border: 1px solid var(--border);">
+                            <div class="avatar" style="background:${assignee.color}">
+                                ${assignee.name.charAt(0).toUpperCase()}
+                            </div>
+                            <span>${assignee.name}</span>
+                        </div>
+                        <button class="delete-member" onclick="deleteChore('${chore.id}')" style="font-size:1.2rem;">&times;</button>
+                    </div>
+                `;
+                choreList.appendChild(item);
+            });
+        }
+
+        // Set default date to today
+        document.getElementById('choreDueDate').valueAsDate = new Date();
+
+        // Initial Render
+        render();
+    </script>
+</body>
+</html>
